@@ -32,6 +32,44 @@ function createUser(req, res) {
   })
 }
 
+function loginUser(req, res){
+  User.findOne({username: req.body.username}, function(err,user){
+    if(err){
+      res.json({
+                errors: {
+                  login_reg: {
+                    message: 'user name and/or password invalid',
+                    kind: "what didn't work",
+                    path: "reference to the schema name",
+                    value: "cause of the initial error"
+                  }
+                },
+                name: "Validation error"
+              })
+            };
+    if (user && user.validPassword(req.body.password)) {
+      console.log("login successful")
+      res.json({
+          _id: user._id
+      });
+    }
+    else {
+      console.log("login failed")
+      res.json({
+          errors: {
+            login_reg: {
+              message: "user name and/or password is invalid",
+              kind: "what didn't work",
+              path: "reference to the schema name",
+              value: "cause of the error"
+            }
+          },
+          name: "validation error"
+      })
+    }
+  })
+}
+
 router.route('/')
   .get(function (req, res) {
   /**
@@ -44,6 +82,11 @@ router.route('/')
 router.route('/newuser')
   .post(function(req,res) {
     createUser(req, res)
+  })
+
+router.route('/login')
+  .post(function(req,res){
+    loginUser(req, res)
   })
 
 module.exports = router
