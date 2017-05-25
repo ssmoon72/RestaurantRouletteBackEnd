@@ -35,17 +35,7 @@ function createUser(req, res) {
 function loginUser(req, res){
   User.findOne({username: req.body.username}, function(err,user){
     if(err){
-      res.json({
-                errors: {
-                  login_reg: {
-                    message: 'user name and/or password invalid',
-                    kind: "what didn't work",
-                    path: "reference to the schema name",
-                    value: "cause of the initial error"
-                  }
-                },
-                name: "Validation error"
-              })
+      console.log(err)
             };
     if (user && user.validPassword(req.body.password)) {
       console.log("login successful")
@@ -55,17 +45,6 @@ function loginUser(req, res){
     }
     else {
       console.log("login failed")
-      res.json({
-          errors: {
-            login_reg: {
-              message: "user name and/or password is invalid",
-              kind: "what didn't work",
-              path: "reference to the schema name",
-              value: "cause of the error"
-            }
-          },
-          name: "validation error"
-      })
     }
   })
 }
