@@ -70,6 +70,18 @@ function loginUser(req, res){
   })
 }
 
+function editUser(req, res) {
+  User.update({_id: req.params.id}, {$set: {score: req.body.score}}, function(err, user){
+    if (err){
+      console.log('error updating user');
+      res.json(user)
+    }
+    else {
+      res.json(user);
+    }
+  })
+}
+
 router.route('/')
   .get(function (req, res) {
   /**
@@ -87,6 +99,11 @@ router.route('/newuser')
 router.route('/login')
   .post(function(req,res){
     loginUser(req, res)
+  })
+
+router.route('/edituser')
+  .post(function(req,res){
+    editUser(req,res)
   })
 
 module.exports = router
